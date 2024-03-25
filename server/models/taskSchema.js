@@ -11,9 +11,9 @@ const TaskSchema = mongoose.Schema(
       required: [true, "Please enter description"],
     },
   },
-  { timeStamp: true }
+  { timestamps: true }
 );
 
-const Task = mongoose.model("Task", TaskSchema);
+const Tasks = mongoose.model("Tasks", TaskSchema);
 
-export default Task;
+export default Tasks;

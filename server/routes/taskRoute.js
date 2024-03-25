@@ -3,14 +3,14 @@ const tastkRouter = express.Router();
 
 import {
   getAllTasks,
-  addTask,
+  setTask,
   deleteTask,
   updateTask,
 } from "../controllers/taskController.js";
 
-tastkRouter.route("/tasks").get(getAllTasks);
-tastkRouter.route("/task").post(addTask);
-tastkRouter.route("/task/:id").put(updateTask);
-tastkRouter.route("/task/:id").delete(deleteTask);
+tastkRouter.route("/").get(getAllTasks);
+tastkRouter.route("/").post(setTask);
+tastkRouter.route("/:id").put(updateTask);
+tastkRouter.route("/:id").delete(deleteTask);
 
 export default tastkRouter;
