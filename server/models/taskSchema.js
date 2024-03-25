@@ -14,6 +14,15 @@ const TaskSchema = mongoose.Schema(
   { timestamps: true }
 );
 
+// REMOVE extra query information from documents
+TaskSchema.set("toJSON", {
+  transform: function (doc, ret) {
+    delete ret.createdAt;
+    delete ret.updatedAt;
+    delete ret.__v;
+  },
+});
+
 const Tasks = mongoose.model("Tasks", TaskSchema);
 
 export default Tasks;
