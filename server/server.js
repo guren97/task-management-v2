@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
 import connectToDb from "./config/db.js";
+import CookieParser from "cookie-parser";
 
 import errorHandler from "./middleware/errorMiddleware.js";
 import taskRouter from "./routes/taskRoutes.js";
@@ -11,6 +12,7 @@ dotenv.config({ path: "./config.env" });
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(CookieParser());
 
 // ## ROUTES
 app.use("/api/tasks", taskRouter);

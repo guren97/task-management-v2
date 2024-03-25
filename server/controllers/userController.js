@@ -1,9 +1,11 @@
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
-
 import User from "../models/UserSchema.js";
+import jwt from "jsonwebtoken";
 import ErrorResponse from "../utils/errorResponse.js";
+import generateToken from "../utils/generateToken.js";
 
+// ## REGISTER USER
 const registerUser = asyncHandler(async (req, res, next) => {
   try {
     const { username, first_name, last_name, email, password } = req.body;
@@ -36,15 +38,14 @@ const registerUser = asyncHandler(async (req, res, next) => {
     });
 
     // Send success response
-    res.status(201).json({
-      success: true,
-      user,
-    });
+    generateToken(user, 200, res);
   } catch (error) {
     console.error(error); // Log detailed error message
     return next(new ErrorResponse("Server Error", 500));
   }
 });
+
+// ## LOGIN USER
 
 const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
@@ -60,15 +61,44 @@ const loginUser = asyncHandler(async (req, res, next) => {
       return next(new ErrorResponse("Password do not match", 401));
     }
 
-    res.json("logged in");
+    generateToken(user, 200, res);
   } catch (error) {
     console.error(error); // Log detailed error message
     return next(new ErrorResponse("Server Error", 500));
   }
 });
 
+// ## CURRENT USER
+
 const getCurrentUser = asyncHandler(async (req, res, next) => {
-  res.json("Get current User");
+  try {
+    // Retrieve the user ID from the decoded JWT token
+    const userId = req.user.id;
+
+    // Find the user by ID and exclude the password field
+    const user = await User.findById(userId).select("-password");
+
+    // Check if the user exists
+    if (!user) {
+      return next(new ErrorResponse("User not found", 404));
+    }
+
+    // Send the user data in the response
+    res.status(200).json({ user });
+  } catch (error) {
+    // Handle server errors
+    return next(new ErrorResponse("Server Error", 500));
+  }
 });
 
-export { registerUser, loginUser, getCurrentUser };
+// ## LOGOUT USER
+
+const logoutUser = asyncHandler(async (req, res, next) => {
+  res.cookie("jwt", "", {
+    httpOnly: true,
+    expires: new Date(0),
+  });
+  res.status(200).json({ message: "User logged out" });
+});
+
+export { registerUser, loginUser, logoutUser, getCurrentUser };
