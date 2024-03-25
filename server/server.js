@@ -3,7 +3,8 @@ import express from "express";
 import connectToDb from "./config/db.js";
 
 import errorHandler from "./middleware/errorMiddleware.js";
-import tastkRouter from "./routes/taskRoute.js";
+import taskRouter from "./routes/taskRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 // ## MIDDLEWARES
 dotenv.config({ path: "./config.env" });
@@ -12,7 +13,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 // ## ROUTES
-app.use("/api/tasks", tastkRouter);
+app.use("/api/tasks", taskRouter);
+app.use("/api/users", userRouter);
 
 // ## ERROR HANDLER MIDDLEWARE
 app.use(errorHandler);

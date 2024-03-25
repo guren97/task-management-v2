@@ -10,6 +10,7 @@ const TaskSchema = mongoose.Schema(
       type: String,
       required: [true, "Please enter description"],
     },
+    author: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
   },
   { timestamps: true }
 );

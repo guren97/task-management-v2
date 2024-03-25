@@ -49,22 +49,22 @@ UserSchema.set("toJSON", {
   },
 });
 
-//Hash password and create salt before sending to database
-UserSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) {
-    next();
-  }
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
+// //Hash password and create salt before sending to database
+// UserSchema.pre("save", async function (next) {
+//   if (!this.isModified("password")) {
+//     next();
+//   }
+//   const salt = await bcrypt.genSalt(10);
+//   this.password = await bcrypt.hash(this.password, salt);
+//   next();
+// });
 
-// Match password function
-// validating password if input is equals from password retrieved from the server
-// if true, proceed to looging in the user
-UserSchema.methods.matchPasswords = async function (password) {
-  return await bcrypt.compare(password, this.password);
-};
+// // Match password function
+// // validating password if input is equals from password retrieved from the server
+// // if true, proceed to looging in the user
+// UserSchema.methods.matchPasswords = async function (password) {
+//   return await bcrypt.compare(password, this.password);
+// };
 
 // UserSchema.methods.validateEmail = async function () {
 //   const emailRegex =

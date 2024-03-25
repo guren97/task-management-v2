@@ -1,42 +1,33 @@
 import asyncHandler from "express-async-handler";
 import Tasks from "../models/TaskSchema.js";
 
-const getAllTasks = asyncHandler(async (req, res, next) => {
+export const getAllTasks = asyncHandler(async (req, res, next) => {
   try {
     const tasks = await Tasks.find();
-
     res.status(200).json({ tasks });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    return next(new ErrorResponse("Server Error", 500));
   }
-  res.send("Get All Tasks");
 });
 
-const setTask = asyncHandler(async (req, res, next) => {
+export const setTask = asyncHandler(async (req, res, next) => {
   const { title, description } = req.body;
 
   try {
     const task = await Tasks.create({ title, description });
     if (!task) {
-      res.status(400);
-      throw new Error("Please enter a task");
+      return next(new ErrorResponse("Please enter a task", 401));
     }
     res.status(201).json({
       success: true,
       task,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    return next(new ErrorResponse("Server Error", 500));
   }
 });
 
-const updateTask = asyncHandler(async (req, res, next) => {
+export const updateTask = asyncHandler(async (req, res, next) => {
   const { title, description } = req.body;
   const taskId = req.params.id;
 
@@ -60,14 +51,11 @@ const updateTask = asyncHandler(async (req, res, next) => {
       updatedTask,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    return next(new ErrorResponse("Server Error", 500));
   }
 });
 
-const deleteTask = asyncHandler(async (req, res, next) => {
+export const deleteTask = asyncHandler(async (req, res, next) => {
   const taskId = req.params.id;
 
   try {
@@ -77,12 +65,6 @@ const deleteTask = asyncHandler(async (req, res, next) => {
       task: { title: task.title, status: "Task deleted successfully" },
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    return next(new ErrorResponse("Server Error", 500));
   }
-  res.send("Delete Task");
 });
-
-export { getAllTasks, setTask, updateTask, deleteTask };
