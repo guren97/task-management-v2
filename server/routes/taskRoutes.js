@@ -1,4 +1,5 @@
 import express from "express";
+import protect from "../middleware/authMiddleware.js";
 const taskRouter = express.Router();
 
 import {
@@ -8,7 +9,7 @@ import {
   updateTask,
 } from "../controllers/taskController.js";
 
-taskRouter.route("/").get(getAllTasks);
+taskRouter.route("/").get(protect, getAllTasks);
 taskRouter.route("/").post(setTask);
 taskRouter.route("/:id").put(updateTask);
 taskRouter.route("/:id").delete(deleteTask);
