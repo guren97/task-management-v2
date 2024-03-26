@@ -51,11 +51,11 @@ UserSchema.set("toJSON", {
 });
 
 // :: GENERATE USER TOKEN
-UserSchema.methods.getSignedToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
-};
+// UserSchema.methods.getSignedToken = function () {
+//   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+//     expiresIn: process.env.JWT_EXPIRE,
+//   });
+// };
 
 // //Hash password and create salt before sending to database
 // UserSchema.pre("save", async function (next) {

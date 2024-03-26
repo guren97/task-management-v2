@@ -1,4 +1,5 @@
 import asyncHandler from "express-async-handler";
+import ErrorResponse from "../utils/errorResponse.js";
 import Tasks from "../models/TaskSchema.js";
 
 export const getAllTasks = asyncHandler(async (req, res, next) => {
@@ -60,6 +61,9 @@ export const deleteTask = asyncHandler(async (req, res, next) => {
 
   try {
     const task = await Tasks.findByIdAndDelete(taskId);
+    if (!task) {
+      return next(new ErrorResponse("Task not found", 404));
+    }
     res.status(200).json({
       success: true,
       task: { title: task.title, status: "Task deleted successfully" },

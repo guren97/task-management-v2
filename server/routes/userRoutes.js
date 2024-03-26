@@ -12,6 +12,8 @@ import {
 userRouter.route("/").post(registerUser);
 userRouter.route("/login").post(loginUser);
 userRouter.route("/logout").post(logoutUser);
+
+// ## PROTECT - Protect route using auth middleware
 userRouter.route("/current").get(protect, getCurrentUser);
 
 export default userRouter;
