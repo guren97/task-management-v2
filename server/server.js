@@ -12,23 +12,19 @@ import userRouter from "./routes/userRoutes.js";
 dotenv.config({ path: "./config.env" });
 
 // // Allow requests from http://localhost:5173
-// const corsOptions = {
-//   origin: "http://localhost:5173",
-//   credentials: true,
-//   optionSuccessStatus: 200,
-// };
-
+const corsOptions = {
+  origin: "http://127.0.0.1:8000",
+  credentials: true, //access-control-allow-credentials:true
+  optionSuccessStatus: 200,
+};
 const app = express();
 // // Middleware
 app.use(CookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(
-  cors({
-    origin: "http://localhost:8000",
-    credentials: true,
-  })
-);
+// Enable CORS with dynamic origin
+app.use(cors(corsOptions));
+
 // ## ROUTES
 app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/users", userRouter);
