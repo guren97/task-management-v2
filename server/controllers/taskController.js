@@ -3,7 +3,13 @@ import ErrorResponse from "../utils/errorResponse.js";
 import Tasks from "../models/TaskSchema.js";
 import User from "../models/UserSchema.js";
 
-// ## --------------------------------------------------------------------------------------
+// /**
+//  * Middleware function to handle the retrieval of all tasks associated with a user.
+//  * @param {Object} req - The request object.
+//  * @param {Object} res - The response object.
+//  * @param {Function} next - The next middleware function.
+//  * @returns {Object} - JSON response indicating the success or failure of the operation.
+//  */
 export const getAllTasks = asyncHandler(async (req, res, next) => {
   const userId = req.params.id;
 
@@ -27,7 +33,13 @@ export const getAllTasks = asyncHandler(async (req, res, next) => {
   }
 });
 
-// ## --------------------------------------------------------------------------------------
+// /**
+//  * Middleware function to handle the creation of a new task.
+//  * @param {Object} req - The request object.
+//  * @param {Object} res - The response object.
+//  * @param {Function} next - The next middleware function.
+//  * @returns {Object} - JSON response indicating the success or failure of the operation.
+//  */
 export const setTask = asyncHandler(async (req, res, next) => {
   // Get the user ID from the authenticated user's information
   const userId = req.user._id;
@@ -45,7 +57,6 @@ export const setTask = asyncHandler(async (req, res, next) => {
     const task = await Tasks.create({ title, description, author: userId });
     res.status(201).json({
       success: true,
-
       task,
     });
   } catch (error) {
@@ -53,7 +64,13 @@ export const setTask = asyncHandler(async (req, res, next) => {
   }
 });
 
-// ## --------------------------------------------------------------------------------------
+// /**
+//  * Middleware function to handle the update of an existing task.
+//  * @param {Object} req - The request object.
+//  * @param {Object} res - The response object.
+//  * @param {Function} next - The next middleware function.
+//  * @returns {Object} - JSON response indicating the success or failure of the operation.
+//  */
 export const updateTask = asyncHandler(async (req, res, next) => {
   const { title, description } = req.body;
   const taskId = req.params.id;
@@ -92,10 +109,16 @@ export const updateTask = asyncHandler(async (req, res, next) => {
   }
 });
 
-// ## --------------------------------------------------------------------------------------
+// /**
+//  * Middleware function to handle the deletion of an existing task.
+//  * @param {Object} req - The request object.
+//  * @param {Object} res - The response object.
+//  * @param {Function} next - The next middleware function.
+//  * @returns {Object} - JSON response indicating the success or failure of the operation.
+//  */
 export const deleteTask = asyncHandler(async (req, res, next) => {
   const taskId = req.params.id;
-  const userId = req.user._id; // GET --user id from the authenticated user object
+  const userId = req.user._id;
 
   try {
     const task = await Tasks.findByIdAndDelete(taskId);

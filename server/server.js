@@ -4,30 +4,37 @@ import connectToDb from "./config/db.js";
 import CookieParser from "cookie-parser";
 import cors from "cors";
 
-import errorHandler from "./middleware/errorMiddleware.js";
+import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
 import taskRouter from "./routes/taskRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 
 // ## MIDDLEWARES
 dotenv.config({ path: "./config.env" });
 
-const corsOptions = {
-  origin: "http://localhost:5173",
-  credentials: true, //access-control-allow-credentials:true
-  optionSuccessStatus: 200,
-};
+// // Allow requests from http://localhost:5173
+// const corsOptions = {
+//   origin: "http://localhost:5173",
+//   credentials: true,
+//   optionSuccessStatus: 200,
+// };
 
 const app = express();
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+// // Middleware
 app.use(CookieParser());
-app.use(cors(corsOptions));
-
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "http://localhost:8000",
+    credentials: true,
+  })
+);
 // ## ROUTES
 app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/users", userRouter);
 
 // ## ERROR HANDLER MIDDLEWARE
+app.use(notFound);
 app.use(errorHandler);
 
 // ## CREATE - Start Server Function

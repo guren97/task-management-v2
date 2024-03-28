@@ -5,14 +5,20 @@ import User from "../models/UserSchema.js";
 import ErrorResponse from "../utils/errorResponse.js";
 import generateToken from "../utils/generateToken.js";
 
-// ## REGISTER USER
+// /**
+//  * Registers a new user.
+//  *
+//  * @param {Object} req - The request object.
+//  * @param {Object} res - The response object.
+//  * @param {Function} next - The next middleware function.
+//  */
 const registerUser = asyncHandler(async (req, res, next) => {
   try {
     const { username, first_name, last_name, email, password } = req.body;
 
     // Check if any required fields are missing
     if (!username || !first_name || !last_name || !email || !password) {
-      return next(new ErrorResponse("All fields are required", 401));
+      return next(new ErrorResponse("All fields are required", 400)); // Changed status to 400 Bad Request
     }
 
     // Check if username or email already exists
@@ -22,7 +28,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
         existingUser.username === username
           ? "User with this username already exists"
           : "User with this email already exists";
-      return next(new ErrorResponse(message, 401));
+      return next(new ErrorResponse(message, 400)); // Changed status to 400 Bad Request
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -38,15 +44,21 @@ const registerUser = asyncHandler(async (req, res, next) => {
     });
 
     // Send success response
-    generateToken(user, 200, res);
+    // Remove this token if do not want to redirected automatically to login
+    generateToken(user, 201, res); // Changed status to 201 Created
   } catch (error) {
     console.error(error); // Log detailed error message
     return next(new ErrorResponse("Server Error", 500));
   }
 });
 
-// ## LOGIN USER
-
+// /**
+//  * Logs in a user.
+//  *
+//  * @param {Object} req - The request object.
+//  * @param {Object} res - The response object.
+//  * @param {Function} next - The next middleware function.
+//  */
 const loginUser = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
   try {
@@ -68,8 +80,13 @@ const loginUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-// ## CURRENT USER
-
+// /**
+//  * Retrieves the current user.
+//  *
+//  * @param {Object} req - The request object.
+//  * @param {Object} res - The response object.
+//  * @param {Function} next - The next middleware function.
+//  */
 const getCurrentUser = asyncHandler(async (req, res, next) => {
   try {
     // Retrieve the user ID from the decoded JWT token
@@ -91,8 +108,13 @@ const getCurrentUser = asyncHandler(async (req, res, next) => {
   }
 });
 
-// ## LOGOUT USER
-
+// /**
+//  * Logs out a user.
+//  *
+//  * @param {Object} req - The request object.
+//  * @param {Object} res - The response object.
+//  * @param {Function} next - The next middleware function.
+//  */
 const logoutUser = asyncHandler(async (req, res, next) => {
   res.cookie("jwt", "", {
     httpOnly: true,
