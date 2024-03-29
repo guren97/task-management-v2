@@ -1,12 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import Button from "../ui/Button.jsx";
-
+// import Input from "../ui/Input.jsx";
 import axios from "axios";
 
-const Login = () => {
-  const navigate = useNavigate();
-
+const Register = () => {
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -19,21 +16,25 @@ const Login = () => {
     }));
   };
 
+  console.log(formData);
+
+  const config = {
+    headers: { "Content-Type": `application/json` },
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
       const response = await axios.post(
         "http://localhost:5000/api/v1/users/login",
-        formData
+        formData,
+        config
       );
-      navigate("/dashboard");
       console.log(response.data); // Data returned by the server after successful POST
       return response;
     } catch (error) {
-      navigate("/login");
-      console.error("Error Logging in user:", error);
-
+      console.error("Error creating user:", error);
       throw error;
     }
   };
@@ -41,7 +42,7 @@ const Login = () => {
   return (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex justify-start">
-        <h1 className="text-2xl font-bold mb-4 items-center">Login</h1>
+        <h1 className="text-2xl font-bold mb-4 items-center">Register</h1>
       </div>
 
       <form className="w-full max-w-md mx-auto" onSubmit={handleSubmit}>
@@ -56,7 +57,6 @@ const Login = () => {
             value={formData.email}
             onChange={handleChange}
             className="border rounded-sm p-2 w-full focus:placeholder:text-slate-300 focus:outline-none hover:border-slate-500"
-            autoComplete="off"
           />
         </div>
         <div className="mb-4">
@@ -78,4 +78,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

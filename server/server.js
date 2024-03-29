@@ -4,7 +4,7 @@ import connectToDb from "./config/db.js";
 import CookieParser from "cookie-parser";
 import cors from "cors";
 
-import { notFound, errorHandler } from "./middleware/errorMiddleware.js";
+import { errorHandler, notFound } from "./middleware/errorMiddleware.js";
 import taskRouter from "./routes/taskRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 
@@ -30,8 +30,8 @@ app.use("/api/v1/tasks", taskRouter);
 app.use("/api/v1/users", userRouter);
 
 // ## ERROR HANDLER MIDDLEWARE
-app.use(notFound);
 app.use(errorHandler);
+app.use(notFound);
 
 // ## CREATE - Start Server Function
 const startServer = async () => {

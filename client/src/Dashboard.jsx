@@ -1,10 +1,5 @@
-import Header from "./components/Header/Header.jsx";
 const Dashboard = () => {
-  return (
-    <div className=" ">
-      <Header />
-    </div>
-  );
+  return <div className=" ">Dashboard</div>;
 };
 
 export default Dashboard;

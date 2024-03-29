@@ -16,7 +16,7 @@ const Header = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <nav className="flex justify-between items-center">
             <div>
-              <Link to="">
+              <Link to="/">
                 <img className="w-14 h-14" src={logo} alt="Logo" />
               </Link>
             </div>
@@ -24,7 +24,7 @@ const Header = () => {
               <li>
                 <Link
                   className=" hover:text-gray-400 text-lg font-medium"
-                  to=""
+                  to="/"
                 >
                   Home
                 </Link>
@@ -32,7 +32,7 @@ const Header = () => {
               <li>
                 <Link
                   className=" hover:text-gray-400 text-lg font-medium"
-                  to=""
+                  to="/login"
                 >
                   Login
                 </Link>
@@ -40,7 +40,7 @@ const Header = () => {
               <li>
                 <Link
                   className=" hover:text-gray-400 text-lg font-medium"
-                  to=""
+                  to="/register"
                 >
                   Register
                 </Link>
